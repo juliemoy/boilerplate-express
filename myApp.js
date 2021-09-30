@@ -2,9 +2,12 @@ var express = require('express');
 var app = express();
 var dotenv = require('dotenv');
 dotenv.config();
+var bodyParser = require('body-parser');
 
 console.log("Hello World");
 console.log(process.env.MESSAGE_STYLE);
+
+app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(function(req,res,next){
     var method = req.method;
@@ -40,6 +43,16 @@ app.get("/now", function(req,res,next) {
     res.json({"time": req.time});
 });
 
+app.get('/:word/echo', function(req,res) {
+  res.json({"echo": req.params.word});
+});
+
+app.route('/name')
+.get(function(req,res){
+  res.json({"name": req.query.first+' '+req.query.last});
+}).post(function(req,res){
+  res.json({"name": req.body.first+' '+req.body.last});
+})
 
 
 
